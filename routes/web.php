@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutMeController;
+use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -10,6 +11,9 @@ use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
+
+Route::get('/auth/{provider}/redirect', [SocialController::class, 'redirect']);
+Route::get('/auth/{provider}/callback', [SocialController::class, 'callback']);
 
 Route::middleware('auth')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

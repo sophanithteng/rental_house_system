@@ -95,13 +95,34 @@ const updateProfile = () => {
 };
 
 const deleteAccount = () => {
+    let timerInterval;
     Swal.fire({
         title: "Are you sure?",
-        text: "Once deleted, you will be redirected to the register page. This action is permanent!",
+        html: "Once deleted, you will be redirected to the register page. This action is permanent!<br><br>The delete button will be active in <b>5</b> seconds.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#ef4444",
         confirmButtonText: "Yes, delete it!",
+        didOpen: () => {
+            const confirmButton = Swal.getConfirmButton();
+            confirmButton.disabled = true;
+            let secondsLeft = 5;
+            const countdownElement = Swal.getHtmlContainer().querySelector("b");
+
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                if (countdownElement) countdownElement.textContent = secondsLeft;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    confirmButton.disabled = false;
+                    if (countdownElement) countdownElement.parentElement.innerHTML = "You can now delete your account.";
+                }
+            }, 1000);
+        },
+        willClose: () => {
+            clearInterval(timerInterval);
+        },
     }).then((result) => {
         if (result.isConfirmed) {
             router.delete(route("profile.destroy"), {
@@ -289,43 +310,9 @@ const imageUrl = (path) => {
                                     <button
                                         @click="deleteAccount"
                                         class="w-full rounded-2xl bg-red-600 py-4 text-white font-bold transition hover:bg-red-700">
-                                        Yes, Delete Account
-                                    </button>
-                                    <button
-                                        @click="activeView = 'history'"
-                                        class="w-full rounded-2xl bg-gray-100 py-4 text-gray-700 font-bold transition hover:bg-gray-200">
-                                        No, Keep My Account
+                                        Delete Account
                                     </button>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="rounded-[35px] bg-white p-8 shadow-sm border border-gray-100">
-                                <h3 class="mb-5 font-bold text-gray-800">
-                                    Quick Edit
-                                </h3>
-                                <form @submit.prevent="updateProfile" class="space-y-4">
-                                    <input v-model="profileForm.username" type="text"
-                                        class="w-full rounded-2xl border-gray-200 py-3 focus:ring-green-500 focus:border-green-500"
-                                        placeholder="Username" />
-                                    <button
-                                        :disabled="profileForm.processing"
-                                        class="w-full rounded-2xl bg-gray-900 py-3 text-white font-bold transition hover:bg-black disabled:opacity-50">
-                                        Update Name
-                                    </button>
-                                </form>
-                            </div>
-
-                            <div
-                                class="rounded-[35px] bg-white p-8 shadow-sm border border-gray-100 flex flex-col justify-center text-center">
-                                <p class="text-sm text-gray-400 mb-4 font-medium">
-                                    Security & Access
-                                </p>
-                                <button @click="activeView = 'edit'" type="button"
-                                    class="w-full rounded-2xl border-2 border-gray-100 py-3 font-bold text-gray-700 hover:bg-gray-50">
-                                    Change Password
-                                </button>
                             </div>
                         </div>
                     </div>

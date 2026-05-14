@@ -13,11 +13,19 @@ defineEmits(['toggle-sidebar']);
 
 <template>
     <!-- Mobile Backdrop: Closes sidebar when clicking outside on mobile -->
-    <div
-        v-if="showingNavigationDropdown"
-        @click="$emit('toggle-sidebar')"
-        class="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-[2px] lg:hidden transition-opacity cursor-pointer"
-    ></div>
+    <Transition
+        enter-active-class="transition-opacity ease-linear duration-300"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition-opacity ease-linear duration-300"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0">
+        <div
+            v-if="showingNavigationDropdown"
+            @click="$emit('toggle-sidebar')"
+            class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm lg:hidden cursor-pointer"
+        ></div>
+    </Transition>
 
     <aside
         class="fixed inset-y-0 left-0 z-50 transform bg-slate-900 transition-all duration-300 ease-in-out lg:static overflow-hidden"

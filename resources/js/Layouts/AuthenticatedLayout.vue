@@ -30,6 +30,7 @@ const adminNavItems = [
             :showing-navigation-dropdown="showingNavigationDropdown"
             :nav-items="navItems"
             :admin-nav-items="adminNavItems"
+            @toggle-sidebar="showingNavigationDropdown = !showingNavigationDropdown"
         />
 
         <Navbar @toggle-sidebar="showingNavigationDropdown = !showingNavigationDropdown">
