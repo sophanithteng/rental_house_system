@@ -13,18 +13,11 @@ defineEmits(['toggle-sidebar']);
 
 <template>
     <!-- Mobile Backdrop: Closes sidebar when clicking outside on mobile -->
-    <Transition
-        enter-active-class="transition-opacity ease-linear duration-300"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-active-class="transition-opacity ease-linear duration-300"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0">
-        <div
-            v-if="showingNavigationDropdown"
-            @click="$emit('toggle-sidebar')"
-            class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm lg:hidden cursor-pointer"
-        ></div>
+    <Transition enter-active-class="transition-opacity ease-linear duration-300" enter-from-class="opacity-0"
+        enter-to-class="opacity-100" leave-active-class="transition-opacity ease-linear duration-300"
+        leave-from-class="opacity-100" leave-to-class="opacity-0">
+        <div v-if="showingNavigationDropdown" @click="$emit('toggle-sidebar')"
+            class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm lg:hidden cursor-pointer"></div>
     </Transition>
 
     <aside
@@ -43,15 +36,15 @@ defineEmits(['toggle-sidebar']);
             </Link>
         </div>
 
-        <Link :href="route('profile.edit')"
-            :title="!showingNavigationDropdown ? $page.props.auth.user.username : ''"
+        <Link :href="route('profile.edit')" :title="!showingNavigationDropdown ? $page.props.auth.user.username : ''"
             class="flex items-center border-b border-slate-700 px-4 py-4 transition-all duration-300 hover:bg-slate-800"
             :class="showingNavigationDropdown ? 'justify-start gap-4 px-6' : 'lg:justify-center lg:px-0'">
             <div class="relative shrink-0">
                 <img class="h-9 w-9 rounded-full object-cover border-2 border-slate-600"
                     :src="$page.props.auth.user.photo ? `/storage/${$page.props.auth.user.photo}` : '/Images/emptyuser.png'"
                     alt="User Avatar" />
-                <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-slate-900"></span>
+                <span
+                    class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-slate-900"></span>
             </div>
             <div v-show="showingNavigationDropdown" class="flex flex-col overflow-hidden">
                 <span class="text-sm font-semibold text-white truncate">{{ $page.props.auth.user.username }}</span>
@@ -71,7 +64,9 @@ defineEmits(['toggle-sidebar']);
                 <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path :d="item.icon" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                <span v-show="showingNavigationDropdown" class="text-sm font-medium whitespace-nowrap">{{ item.name }}</span>
+                <!-- <img :src="item.icon" class="h-5 w-5 shrink-0 object-contain" :alt="item.name" /> -->
+                <span v-show="showingNavigationDropdown" class="text-sm font-medium whitespace-nowrap">{{ item.name
+                    }}</span>
             </ResponsiveNavLink>
 
             <template v-if="$page.props.auth.user?.role === 'Admin' || $page.props.auth.user?.role === 'SuperAdmin'">
@@ -86,7 +81,9 @@ defineEmits(['toggle-sidebar']);
                         stroke-width="2">
                         <path :d="item.icon" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span v-show="showingNavigationDropdown" class="text-sm font-medium whitespace-nowrap">{{ item.name }}</span>
+                    <!-- <img :src="item.icon" class="h-5 w-5 shrink-0 object-contain" :alt="item.name" /> -->
+                    <span v-show="showingNavigationDropdown" class="text-sm font-medium whitespace-nowrap">{{ item.name
+                        }}</span>
                 </ResponsiveNavLink>
             </template>
 
@@ -100,6 +97,7 @@ defineEmits(['toggle-sidebar']);
                     <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
+                <!-- <img src="/images/icons/logout.png" class="h-5 w-5 shrink-0 object-contain" alt="Logout" /> -->
                 <span v-show="showingNavigationDropdown" class="text-sm font-medium whitespace-nowrap">Log Out</span>
             </ResponsiveNavLink>
         </nav>

@@ -17,18 +17,27 @@ class RoomController extends Controller
     public function index(Request $request): Response
     {
         $categoryId = $request->integer('category_id');
+        $search = $request->input('search');
+
         $query = Room::query()->with('category')->latest('id');
+
         if ($categoryId > 0) {
             $query->where('category_id', $categoryId);
         }
+
+        if ($request->filled('search')) {
+            $query->where('room_number', 'like', '%' . $search . '%');
+        }
+
         $tenant = $request->user()?->tenant;
         $hasRequiredInfo = (bool) ($tenant?->full_name && $tenant?->phone && $tenant?->id_card && $tenant?->address_origin);
 
         return Inertia::render('Rooms/Index', [
-            'rooms' => $query->get(),
+            'rooms' => $query->paginate(12)->withQueryString(),
             'categories' => Category::orderBy('cat_name')->get(),
             'filters' => [
-                'category_id' => $categoryId,
+                'category_id' => $categoryId ?: null,
+                'search' => $search,
             ],
             'isAdmin' => $request->user()?->isAdmin() ?? false,
             'hasRequiredInfo' => $hasRequiredInfo,
